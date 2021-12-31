@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ include "rpi-exporter.fullname" . }}
+  labels:
+    {{- include "rpi-exporter.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "rpi-exporter.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "rpi-exporter.selectorLabels" . | nindent 8 }}
+    spec:
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          operator: Exists
+          effect: NoSchedule
+      containers:
+        - name: {{ include "rpi-exporter.fullname" . }}
+          image: {{ .Values.image }}
+          ports:
+            - name: http
+              containerPort: 9243
+              protocol: TCP

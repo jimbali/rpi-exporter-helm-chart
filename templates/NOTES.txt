@@ -1,0 +1,2 @@
+Creates a DaemonSet which exports the current CPU temp for each node,
+and a pod monitor so that Promerheus Operator will scrape the pods.
